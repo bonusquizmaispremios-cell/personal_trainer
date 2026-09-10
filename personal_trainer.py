@@ -211,6 +211,7 @@ def barra_salvar():
             file_name=f"personal_trainer_{nome_usuario}.json",
             mime="application/json",
             use_container_width=True,
+            key="pt50"
         )
     st.markdown("<hr class='divider'>", unsafe_allow_html=True)
     st.markdown("""<style>
@@ -302,27 +303,27 @@ elif st.session_state.etapa == "App":
                 "Objetivo:", ["Emagrecer","Ganhar massa","Definir","Condicionamento físico","Saúde e bem-estar","Reabilitação"],
                 index=["Emagrecer","Ganhar massa","Definir","Condicionamento físico","Saúde e bem-estar","Reabilitação"].index(
                     st.session_state.objetivo_treino) if st.session_state.objetivo_treino in
-                    ["Emagrecer","Ganhar massa","Definir","Condicionamento físico","Saúde e bem-estar","Reabilitação"] else 0)
+                    ["Emagrecer","Ganhar massa","Definir","Condicionamento físico","Saúde e bem-estar","Reabilitação"] else 0, key="pt49")
             st.session_state.local_treino = st.selectbox(
                 "Onde treina:", ["Academia","Casa com equipamentos","Casa sem equipamentos","Ar livre","Misto"],
                 index=["Academia","Casa com equipamentos","Casa sem equipamentos","Ar livre","Misto"].index(
                     st.session_state.local_treino) if st.session_state.local_treino in
-                    ["Academia","Casa com equipamentos","Casa sem equipamentos","Ar livre","Misto"] else 0)
+                    ["Academia","Casa com equipamentos","Casa sem equipamentos","Ar livre","Misto"] else 0, key="pt48")
             st.session_state.nivel_treino = st.selectbox(
                 "Nível:", ["Iniciante","Intermediário","Avançado"],
                 index=["Iniciante","Intermediário","Avançado"].index(
                     st.session_state.nivel_treino) if st.session_state.nivel_treino in
-                    ["Iniciante","Intermediário","Avançado"] else 0)
+                    ["Iniciante","Intermediário","Avançado"] else 0, key="pt47")
         with col_b:
             st.session_state.dias_semana  = st.slider("Dias por semana:", 1, 7, st.session_state.dias_semana, key="personal1")
             st.session_state.tempo_treino = st.selectbox(
                 "Tempo por treino:", ["30 minutos","45 minutos","60 minutos","90 minutos","2 horas"],
                 index=["30 minutos","45 minutos","60 minutos","90 minutos","2 horas"].index(
                     st.session_state.tempo_treino) if st.session_state.tempo_treino in
-                    ["30 minutos","45 minutos","60 minutos","90 minutos","2 horas"] else 2)
+                    ["30 minutos","45 minutos","60 minutos","90 minutos","2 horas"] else 2, key="pt46")
             st.session_state.limitacoes   = st.text_input(
                 "Limitações físicas:", value=st.session_state.limitacoes,
-                placeholder="ex: dor no joelho, hérnia de disco, ombro operado...")
+                placeholder="ex: dor no joelho, hérnia de disco, ombro operado...", key="pt45")
             col_p, col_a2 = st.columns(2)
             with col_p:
                 st.session_state.peso   = st.text_input("Peso (kg):", value=st.session_state.peso, placeholder="ex: 75", key="personal4")
@@ -394,22 +395,22 @@ elif st.session_state.etapa == "App":
                 "Peito e Tríceps", "Costas e Bíceps", "Pernas e Glúteos",
                 "Ombros e Trapézio", "Abdômen e Core", "Corpo inteiro (Full Body)",
                 "Cardio e Queima de Gordura", "Funcional", "Livre (IA decide pelo objetivo)",
-            ])
+            ], key="pt44")
             local_d    = st.selectbox("📍 Local:", ["Academia","Casa com equipamentos","Casa sem equipamentos","Ar livre"],
                 index=["Academia","Casa com equipamentos","Casa sem equipamentos","Ar livre"].index(
                     st.session_state.local_treino) if st.session_state.local_treino in
-                    ["Academia","Casa com equipamentos","Casa sem equipamentos","Ar livre"] else 0)
+                    ["Academia","Casa com equipamentos","Casa sem equipamentos","Ar livre"] else 0, key="pt43")
         with col2:
             nivel_d    = st.selectbox("📊 Nível:", ["Iniciante","Intermediário","Avançado"],
                 index=["Iniciante","Intermediário","Avançado"].index(
                     st.session_state.nivel_treino) if st.session_state.nivel_treino in
-                    ["Iniciante","Intermediário","Avançado"] else 0)
+                    ["Iniciante","Intermediário","Avançado"] else 0, key="pt42")
             tempo_d    = st.selectbox("⏱️ Tempo:", ["30 minutos","45 minutos","60 minutos","90 minutos"],
                 index=["30 minutos","45 minutos","60 minutos","90 minutos"].index(
                     st.session_state.tempo_treino) if st.session_state.tempo_treino in
-                    ["30 minutos","45 minutos","60 minutos","90 minutos"] else 2)
+                    ["30 minutos","45 minutos","60 minutos","90 minutos"] else 2, key="pt41")
             limitacoes_d = st.text_input("⚠️ Limitações:", value=st.session_state.limitacoes,
-                placeholder="ex: joelho, lombar...")
+                placeholder="ex: joelho, lombar...", key="pt40")
 
         if st.button("💪 GERAR TREINO DO DIA", key="personal6"):
             with st.spinner("Seu personal montando o treino..."):
@@ -453,7 +454,7 @@ elif st.session_state.etapa == "App":
                 st.download_button("📋 Baixar treino (.txt)",
                     data=st.session_state['treino_dia_temp'],
                     file_name=f"treino_{foco_dia.replace(' ','_') if 'foco_dia' in dir() else 'dia'}.txt",
-                    mime="text/plain", use_container_width=True)
+                    mime="text/plain", use_container_width=True, key="pt39")
             with col_sv:
                 if st.button("❤️ Salvar treino", use_container_width=True, key="personal7"):
                     st.session_state.treinos_salvos.append({
@@ -480,19 +481,19 @@ elif st.session_state.etapa == "App":
         with col1:
             dias_s   = st.slider("Dias de treino na semana:", 2, 6, st.session_state.dias_semana, key="personal2")
             local_s  = st.selectbox("Local:", ["Academia","Casa com equipamentos","Casa sem equipamentos","Misto"],
-                index=0)
+                index=0, key="pt38")
             nivel_s  = st.selectbox("Nível:", ["Iniciante","Intermediário","Avançado"],
                 index=["Iniciante","Intermediário","Avançado"].index(
                     st.session_state.nivel_treino) if st.session_state.nivel_treino in
-                    ["Iniciante","Intermediário","Avançado"] else 0)
+                    ["Iniciante","Intermediário","Avançado"] else 0, key="pt37")
         with col2:
             objetivo_s   = st.selectbox("Objetivo principal:", [
                 "Emagrecer","Ganhar massa","Definir","Condicionamento","Saúde geral"],
                 index=["Emagrecer","Ganhar massa","Definir","Condicionamento","Saúde geral"].index(
                     st.session_state.objetivo_treino) if st.session_state.objetivo_treino in
-                    ["Emagrecer","Ganhar massa","Definir","Condicionamento","Saúde geral"] else 0)
+                    ["Emagrecer","Ganhar massa","Definir","Condicionamento","Saúde geral"] else 0, key="pt36")
             tempo_s      = st.selectbox("Tempo por treino:", ["30 minutos","45 minutos","60 minutos","90 minutos"],
-                index=2)
+                index=2, key="pt35")
             limitacoes_s = st.text_input("Limitações:", value=st.session_state.limitacoes, key="personal9")
 
         if st.button("📅 GERAR PLANILHA DA SEMANA", key="personal10"):
@@ -534,7 +535,7 @@ elif st.session_state.etapa == "App":
             with col_dl:
                 st.download_button("📋 Baixar planilha (.txt)",
                     data=st.session_state['semana_temp'],
-                    file_name="planilha_semanal.txt", mime="text/plain", use_container_width=True)
+                    file_name="planilha_semanal.txt", mime="text/plain", use_container_width=True, key="pt34")
             with col_sv:
                 if st.button("❤️ Salvar planilha", key="sv_sem", use_container_width=True):
                     st.session_state.treinos_salvos.append({
@@ -558,19 +559,19 @@ elif st.session_state.etapa == "App":
             foco_casa    = st.selectbox("Foco:", [
                 "Corpo inteiro (Full Body)","Pernas e Glúteos","Abdômen e Core",
                 "Peito e Braços","Cardio e Queima de Gordura","Funcional","Yoga e Mobilidade",
-            ])
+            ], key="pt33")
             espaco       = st.selectbox("Espaço disponível:", [
                 "Sala/quarto pequeno (2x2m)","Sala maior (3x3m+)","Quintal/área externa","Qualquer espaço",
-            ])
+            ], key="pt32")
         with col2:
             equipamentos = st.multiselect("Equipamentos que tem em casa:", [
                 "Nenhum (só peso do corpo)","Halteres","Elásticos/faixas","Barra fixa",
                 "Corda de pular","Banco/cadeira","Garrafa d'água como peso",
-            ], default=["Nenhum (só peso do corpo)"])
+            ], default=["Nenhum (só peso do corpo)"], key="pt31")
             nivel_c      = st.selectbox("Nível:", ["Iniciante","Intermediário","Avançado"],
                 index=["Iniciante","Intermediário","Avançado"].index(
                     st.session_state.nivel_treino) if st.session_state.nivel_treino in
-                    ["Iniciante","Intermediário","Avançado"] else 0)
+                    ["Iniciante","Intermediário","Avançado"] else 0, key="pt30")
             tempo_c      = st.selectbox("Tempo:", ["20 minutos","30 minutos","45 minutos","60 minutos"], key="personal11")
 
         if st.button("🏠 GERAR TREINO EM CASA", key="personal12"):
@@ -615,7 +616,7 @@ elif st.session_state.etapa == "App":
             with col_dl:
                 st.download_button("📋 Baixar treino (.txt)",
                     data=st.session_state['casa_temp'],
-                    file_name="treino_casa.txt", mime="text/plain", use_container_width=True)
+                    file_name="treino_casa.txt", mime="text/plain", use_container_width=True, key="pt29")
             with col_sv:
                 if st.button("❤️ Salvar", key="sv_casa", use_container_width=True):
                     st.session_state.treinos_salvos.append({
@@ -642,18 +643,18 @@ elif st.session_state.etapa == "App":
         with col1:
             semanas_atual= st.number_input("Há quantas semanas está treinando:", min_value=1, max_value=104, value=4, key="personal13")
             treino_atual = st.text_area("Seu treino atual (exercícios e cargas):", height=120,
-                placeholder="ex: Supino reto: 3x10 com 30kg\nAgachamento: 4x12 com 40kg\nRosca direta: 3x12 com 10kg...")
+                placeholder="ex: Supino reto: 3x10 com 30kg\nAgachamento: 4x12 com 40kg\nRosca direta: 3x12 com 10kg...", key="pt28")
         with col2:
             objetivo_e   = st.selectbox("Objetivo da progressão:", [
                 "Ganhar força (menos rep, mais carga)",
                 "Ganhar massa (hipertrofia)",
                 "Resistência (mais rep, menos carga)",
                 "Misto equilibrado",
-            ])
+            ], key="pt27")
             nivel_e      = st.selectbox("Nível:", ["Iniciante","Intermediário","Avançado"],
                 index=["Iniciante","Intermediário","Avançado"].index(
                     st.session_state.nivel_treino) if st.session_state.nivel_treino in
-                    ["Iniciante","Intermediário","Avançado"] else 0)
+                    ["Iniciante","Intermediário","Avançado"] else 0, key="pt26")
 
         if st.button("📈 GERAR PLANO DE PROGRESSÃO", key="personal14"):
             if treino_atual.strip():
@@ -694,7 +695,7 @@ elif st.session_state.etapa == "App":
             with col_dl:
                 st.download_button("📋 Baixar plano (.txt)",
                     data=st.session_state['evolucao_temp'],
-                    file_name="progressao_cargas.txt", mime="text/plain", use_container_width=True)
+                    file_name="progressao_cargas.txt", mime="text/plain", use_container_width=True, key="pt25")
             with col_sv:
                 if st.button("❤️ Salvar", key="sv_ev", use_container_width=True):
                     st.session_state.treinos_salvos.append({
@@ -720,14 +721,14 @@ elif st.session_state.etapa == "App":
                 musculo_aq = st.selectbox("Grupo muscular do treino:", [
                     "Peito e Tríceps","Costas e Bíceps","Pernas e Glúteos",
                     "Ombros","Abdômen","Corpo inteiro",
-                ])
+                ], key="pt24")
                 tempo_aq   = st.selectbox("Tempo para aquecimento:", ["5 minutos","8 minutos","10 minutos","15 minutos"], key="personal15")
             with col2:
                 local_aq   = st.selectbox("Local:", ["Academia","Casa","Ar livre"], key="personal16")
                 nivel_aq   = st.selectbox("Nível:", ["Iniciante","Intermediário","Avançado"],
                     index=["Iniciante","Intermediário","Avançado"].index(
                         st.session_state.nivel_treino) if st.session_state.nivel_treino in
-                        ["Iniciante","Intermediário","Avançado"] else 0)
+                        ["Iniciante","Intermediário","Avançado"] else 0, key="pt23")
 
             if st.button("🔥 GERAR AQUECIMENTO", key="personal17"):
                 with st.spinner("Preparando aquecimento..."):
@@ -757,7 +758,7 @@ elif st.session_state.etapa == "App":
             if st.session_state.get('aquec_temp'):
                 st.download_button("📋 Baixar aquecimento (.txt)",
                     data=st.session_state['aquec_temp'],
-                    file_name="aquecimento.txt", mime="text/plain")
+                    file_name="aquecimento.txt", mime="text/plain", key="pt22")
 
         with tab2:
             col1, col2 = st.columns(2)
@@ -800,7 +801,7 @@ elif st.session_state.etapa == "App":
             if st.session_state.get('along_temp'):
                 st.download_button("📋 Baixar alongamento (.txt)",
                     data=st.session_state['along_temp'],
-                    file_name="alongamento.txt", mime="text/plain")
+                    file_name="alongamento.txt", mime="text/plain", key="pt21")
 
         # ========================
         # TREINOS SALVOS
@@ -881,7 +882,7 @@ elif st.session_state.etapa == "App":
                     for t in st.session_state.historico_treinos
                 )
                 st.download_button("⬇️ Exportar TXT", data=hist_txt,
-                    file_name="historico_treinos.txt", mime="text/plain")
+                    file_name="historico_treinos.txt", mime="text/plain", key="pt20")
 
             for i, item in enumerate(reversed(st.session_state.historico_treinos)):
                 if filtro != "Todos" and item['tipo'] != filtro:
@@ -906,19 +907,19 @@ elif st.session_state.etapa == "App":
                 an_sexo = st.selectbox("Sexo biológico:", ["Masculino","Feminino"], index=0 if st.session_state.get('an_sexo','Masculino')=='Masculino' else 1, key="personal27")
             with col3:
                 an_objetivo = st.selectbox("Objetivo principal:", ["Perder gordura","Ganhar massa muscular","Manutenção","Condicionamento físico","Saúde geral","Desempenho esportivo"],
-                    index=["Perder gordura","Ganhar massa muscular","Manutenção","Condicionamento físico","Saúde geral","Desempenho esportivo"].index(st.session_state.get('an_objetivo','Perder gordura')))
+                    index=["Perder gordura","Ganhar massa muscular","Manutenção","Condicionamento físico","Saúde geral","Desempenho esportivo"].index(st.session_state.get('an_objetivo','Perder gordura')), key="pt19")
                 an_nivel = st.selectbox("Nível de experiência:", ["Iniciante (menos de 6 meses)","Intermediário (6m-2 anos)","Avançado (2+ anos)","Atleta"],
-                    index=["Iniciante (menos de 6 meses)","Intermediário (6m-2 anos)","Avançado (2+ anos)","Atleta"].index(st.session_state.get('an_nivel','Iniciante (menos de 6 meses)')))
+                    index=["Iniciante (menos de 6 meses)","Intermediário (6m-2 anos)","Avançado (2+ anos)","Atleta"].index(st.session_state.get('an_nivel','Iniciante (menos de 6 meses)')), key="pt18")
 
             st.markdown("#### 🏋️ Treino")
             col4, col5 = st.columns(2)
             with col4:
                 an_dias = st.slider("Dias disponíveis por semana:", 1, 7, st.session_state.get('an_dias', 3), key="personal3_x2")
                 an_duracao = st.selectbox("Duração por sessão:", ["30 min","45 min","60 min","75 min","90 min+"],
-                    index=["30 min","45 min","60 min","75 min","90 min+"].index(st.session_state.get('an_duracao','60 min')))
+                    index=["30 min","45 min","60 min","75 min","90 min+"].index(st.session_state.get('an_duracao','60 min')), key="pt17")
             with col5:
                 an_local = st.selectbox("Local de treino:", ["Academia completa","Academia básica","Em casa com equipamentos","Em casa sem equipamentos","Ao ar livre","Híbrido"],
-                    index=["Academia completa","Academia básica","Em casa com equipamentos","Em casa sem equipamentos","Ao ar livre","Híbrido"].index(st.session_state.get('an_local','Academia completa')))
+                    index=["Academia completa","Academia básica","Em casa com equipamentos","Em casa sem equipamentos","Ao ar livre","Híbrido"].index(st.session_state.get('an_local','Academia completa')), key="pt16")
                 an_equipamentos = st.text_input("Equipamentos disponíveis:", value=st.session_state.get('an_equipamentos',''), placeholder="ex: halteres, barra, elásticos...", key="personal28")
 
             st.markdown("#### 🩺 Saúde e Limitações")
@@ -934,17 +935,17 @@ elif st.session_state.etapa == "App":
             col8, col9 = st.columns(2)
             with col8:
                 an_dieta = st.selectbox("Tipo de alimentação:", ["Onívoro","Vegetariano","Vegano","Low carb","Cetogênica","Sem restrições"],
-                    index=["Onívoro","Vegetariano","Vegano","Low carb","Cetogênica","Sem restrições"].index(st.session_state.get('an_dieta','Onívoro')))
+                    index=["Onívoro","Vegetariano","Vegano","Low carb","Cetogênica","Sem restrições"].index(st.session_state.get('an_dieta','Onívoro')), key="pt15")
                 an_sono = st.selectbox("Horas de sono por noite:", ["Menos de 5h","5-6h","6-7h","7-8h","8h+"],
-                    index=["Menos de 5h","5-6h","6-7h","7-8h","8h+"].index(st.session_state.get('an_sono','7-8h')))
+                    index=["Menos de 5h","5-6h","6-7h","7-8h","8h+"].index(st.session_state.get('an_sono','7-8h')), key="pt14")
             with col9:
                 an_trabalho = st.selectbox("Nível de atividade no trabalho:", ["Sedentário (escritório)","Levemente ativo","Moderadamente ativo","Muito ativo (trabalho físico)"],
-                    index=["Sedentário (escritório)","Levemente ativo","Moderadamente ativo","Muito ativo (trabalho físico)"].index(st.session_state.get('an_trabalho','Sedentário (escritório)')))
+                    index=["Sedentário (escritório)","Levemente ativo","Moderadamente ativo","Muito ativo (trabalho físico)"].index(st.session_state.get('an_trabalho','Sedentário (escritório)')), key="pt13")
                 an_estresse = st.selectbox("Nível de estresse geral:", ["Baixo","Moderado","Alto","Muito alto"],
-                    index=["Baixo","Moderado","Alto","Muito alto"].index(st.session_state.get('an_estresse','Moderado')))
+                    index=["Baixo","Moderado","Alto","Muito alto"].index(st.session_state.get('an_estresse','Moderado')), key="pt12")
 
             an_obs = st.text_area("Outras informações importantes:", height=80, value=st.session_state.get('an_obs',''),
-                placeholder="qualquer coisa que seu personal precisaria saber...")
+                placeholder="qualquer coisa que seu personal precisaria saber...", key="pt11")
 
             submitted = st.form_submit_button("💾 SALVAR ANAMNESE COMPLETA", key="personalfsb501")
             if submitted:
@@ -1021,7 +1022,7 @@ elif st.session_state.etapa == "App":
                 "Whey Protein","Creatina","BCAA","Glutamina","Cafeína/Pré-treino",
                 "Ômega-3","Vitamina D","ZMA","Beta-Alanina","Albumina",
                 "Proteína Vegetal (pea, arroz)","Colágeno","Multivitamínico","HMB","Ashwagandha"
-            ])
+            ], key="pt10")
             if st.button("📚 GUIA COMPLETO DESTE SUPLEMENTO", key="personal38"):
                 with st.spinner("Preparando guia..."):
                     prompt = (
@@ -1124,17 +1125,17 @@ elif st.session_state.etapa == "App":
         col1, col2, col3 = st.columns(3)
         with col1:
             peso_mac = st.number_input("Peso (kg):", min_value=30.0, max_value=250.0,
-                value=float(st.session_state.get('an_peso', 70)), step=0.5)
+                value=float(st.session_state.get('an_peso', 70)), step=0.5, key="pt9")
             altura_mac = st.number_input("Altura (cm):", min_value=120, max_value=220,
-                value=int(st.session_state.get('an_altura', 170)))
+                value=int(st.session_state.get('an_altura', 170)), key="pt8")
             idade_mac = st.number_input("Idade:", min_value=12, max_value=90,
-                value=int(st.session_state.get('an_idade', 30)))
+                value=int(st.session_state.get('an_idade', 30)), key="pt7")
         with col2:
             sexo_mac = st.selectbox("Sexo biológico:", ["Masculino","Feminino"],
-                index=0 if st.session_state.get('an_sexo','Masculino')=='Masculino' else 1)
+                index=0 if st.session_state.get('an_sexo','Masculino')=='Masculino' else 1, key="pt6")
             atividade_mac = st.selectbox("Nível de atividade:", [
                 "Sedentário (sem exercício)","Levemente ativo (1-2x/sem)",
-                "Moderadamente ativo (3-4x/sem)","Muito ativo (5-6x/sem)","Extremamente ativo (2x/dia)"])
+                "Moderadamente ativo (3-4x/sem)","Muito ativo (5-6x/sem)","Extremamente ativo (2x/dia)"], key="pt5")
         with col3:
             objetivo_mac = st.selectbox("Objetivo:", ["Perder gordura","Manutenção","Ganhar massa"], key="personal45")
             dieta_mac = st.selectbox("Preferência alimentar:", ["Onívoro","Vegetariano","Vegano","Low carb","Cetogênica"], key="personal46")
@@ -1247,7 +1248,7 @@ elif st.session_state.etapa == "App":
                 "Queda de desempenho nos treinos","Fadiga persistente mesmo com descanso",
                 "Irritabilidade e mudanças de humor","Insônia ou sono ruim",
                 "Dores articulares frequentes","Perda de motivação para treinar",
-                "Infecções frequentes (gripes, resfriados)","Frequência cardíaca em repouso elevada"])
+                "Infecções frequentes (gripes, resfriados)","Frequência cardíaca em repouso elevada"], key="pt4")
 
             if st.button("🚨 AVALIAR RISCO DE OVERTRAINING", key="personal54"):
                 if sintomas_over:
@@ -1285,9 +1286,9 @@ elif st.session_state.etapa == "App":
             "Abandonei os treinos e quero recomeçar","Sabotagem — começo bem e travejo no meio",
             "Como criar um hábito de treino duradouro","Ansiedade com resultados lentos",
             "Como lidar com a semana que fugiu do plano","Mentalidade de atleta para vida real",
-        ])
+        ], key="pt3")
         contexto_mental = st.text_area("Conte mais sobre o que está acontecendo:", height=100,
-            placeholder="ex: Sei que devo treinar mas quando chega a hora invento desculpas...")
+            placeholder="ex: Sei que devo treinar mas quando chega a hora invento desculpas...", key="pt2")
 
         if st.button("🧠 ORIENTAÇÃO MENTAL", key="personal55"):
             with st.spinner("Preparando orientação..."):
@@ -1423,7 +1424,7 @@ elif st.session_state.etapa == "App":
                 duracao_des = st.selectbox("Duração:", ["30 dias","60 dias","90 dias"], key="personal65")
                 objetivo_des = st.selectbox("Objetivo do desafio:", [
                     "Perder gordura","Ganhar massa","Criar hábito de treino",
-                    "Melhorar condicionamento","Definição muscular","Força"])
+                    "Melhorar condicionamento","Definição muscular","Força"], key="pt1")
             with col2:
                 dias_semana_des = st.slider("Dias de treino por semana:", 2, 6, 3, key="personal8_x2")
                 nivel_des = st.selectbox("Intensidade:", ["Leve (foco no hábito)","Moderada","Intensa"], key="personal66")
