@@ -262,49 +262,11 @@ if st.session_state.etapa == "Login":
 elif st.session_state.etapa == "App":
 
 
-    # NAVBAR
-    _nav_pgs = ['Home', 'TreinoDia', 'Semana', 'Casa', 'Evolucao', 'Alongamento', 'Salvos', 'Progresso', 'Anamnese', 'Suplementacao', 'Fadiga', 'Macros', 'Recuperacao', 'Mental', 'Biblioteca', 'Desafio']
-    _nav_ics = ['🏠', '💪', '📅', '🏠2', '📈', '🧘', '❤️', '📊', '📋', '💊', '🔥', '🍽️', '😴', '🧠', '📚', '🏆']
-    _nav_lbs = ['Painel Principal', 'Treino do Dia', 'Planilha da Semana', 'Treino em Casa', 'Progressão de Cargas', 'Aquecimento e Alongamento', 'Treinos Salvos', 'Meu Progresso', 'Minha Anamnese Completa', 'Suplementação Inteligente', 'Treino por Nível de Energia', 'Calculadora de Macros', 'Recuperação e Sono', 'Mentalidade e Consistência', 'Biblioteca de Exercícios', 'Desafio 30/60/90 Dias']
-    _nav_idx = _nav_pgs.index(st.session_state.pagina) if st.session_state.pagina in _nav_pgs else 0
-    if '_menu_open' not in st.session_state: st.session_state['_menu_open'] = False
 
-    _cl, _cc, _cr, _cm = st.columns([1, 6, 1, 1])
-    with _cl:
-        if st.button("‹", key="nav_prev", use_container_width=True, disabled=_nav_idx==0):
-            st.session_state.pagina = _nav_pgs[_nav_idx-1]; st.rerun()
-    with _cc:
-        st.markdown(f"<div style='text-align:center;padding:7px 0;font-weight:700;font-size:0.95em;color:#1A1A2E;'>{_nav_lbs[_nav_idx]}<br><span style='font-size:0.65em;color:#94A3B8;'>{_nav_idx+1}/{len(_nav_pgs)}</span></div>", unsafe_allow_html=True)
-    with _cr:
-        if st.button("›", key="nav_next", use_container_width=True, disabled=_nav_idx==len(_nav_pgs)-1):
-            st.session_state.pagina = _nav_pgs[_nav_idx+1]; st.rerun()
-    with _cm:
-        if st.button("📋", key="nav_menu", use_container_width=True):
-            st.session_state['_menu_open'] = not st.session_state['_menu_open']; st.rerun()
+    # TABS — navegação nativa
+    (_tab_Home, _tab_TreinoDia, _tab_Semana, _tab_Casa, _tab_Evolucao, _tab_Alongamento, _tab_Salvos, _tab_Progresso, _tab_Anamnese, _tab_Suplementacao, _tab_Fadiga, _tab_Macros, _tab_Recuperacao, _tab_Mental, _tab_Biblioteca, _tab_Desafio) = st.tabs(['🏠 Painel', '💪 Treino do Dia', '📅 Semana', '🏡 Treino Casa', '📈 Progressão', '🧘 Alongamento', '❤️ Salvos', '📊 Progresso', '📋 Anamnese', '💊 Suplementação', '🔥 Energia', '🍽️ Macros', '😴 Recuperação', '🧠 Mentalidade', '📚 Biblioteca', '🏆 Desafio'])
 
-    if st.session_state['_menu_open']:
-        _d1 = st.columns(7)
-        if _d1[0].button("🏠", key="dk1_Home", help="Painel Principal", use_container_width=True): st.session_state.pagina="Home"; st.rerun()
-        if _d1[1].button("💪", key="dk1_TreinoDia", help="Treino do Dia", use_container_width=True): st.session_state.pagina="TreinoDia"; st.rerun()
-        if _d1[2].button("📅", key="dk1_Semana", help="Planilha da Semana", use_container_width=True): st.session_state.pagina="Semana"; st.rerun()
-        if _d1[3].button("🏠2", key="dk1_Casa", help="Treino em Casa", use_container_width=True): st.session_state.pagina="Casa"; st.rerun()
-        if _d1[4].button("📈", key="dk1_Evolucao", help="Progressão de Cargas", use_container_width=True): st.session_state.pagina="Evolucao"; st.rerun()
-        if _d1[5].button("🧘", key="dk1_Alongamento", help="Aquecimento e Alongamento", use_container_width=True): st.session_state.pagina="Alongamento"; st.rerun()
-        if _d1[6].button("❤️", key="dk1_Salvos", help="Treinos Salvos", use_container_width=True): st.session_state.pagina="Salvos"; st.rerun()
-        _d2 = st.columns(7)
-        if _d2[0].button("📊", key="dk2_Progresso", help="Meu Progresso", use_container_width=True): st.session_state.pagina="Progresso"; st.rerun()
-        if _d2[1].button("📋", key="dk2_Anamnese", help="Minha Anamnese Completa", use_container_width=True): st.session_state.pagina="Anamnese"; st.rerun()
-        if _d2[2].button("💊", key="dk2_Suplementacao", help="Suplementação Inteligente", use_container_width=True): st.session_state.pagina="Suplementacao"; st.rerun()
-        if _d2[3].button("🔥", key="dk2_Fadiga", help="Treino por Nível de Energia", use_container_width=True): st.session_state.pagina="Fadiga"; st.rerun()
-        if _d2[4].button("🍽️", key="dk2_Macros", help="Calculadora de Macros", use_container_width=True): st.session_state.pagina="Macros"; st.rerun()
-        if _d2[5].button("😴", key="dk2_Recuperacao", help="Recuperação e Sono", use_container_width=True): st.session_state.pagina="Recuperacao"; st.rerun()
-        if _d2[6].button("🧠", key="dk2_Mental", help="Mentalidade e Consistência", use_container_width=True): st.session_state.pagina="Mental"; st.rerun()
-        _d3 = st.columns(2)
-        if _d3[0].button("📚", key="dk3_Biblioteca", help="Biblioteca de Exercícios", use_container_width=True): st.session_state.pagina="Biblioteca"; st.rerun()
-        if _d3[1].button("🏆", key="dk3_Desafio", help="Desafio 30/60/90 Dias", use_container_width=True): st.session_state.pagina="Desafio"; st.rerun()
-
-    st.markdown("<hr class='divider'>", unsafe_allow_html=True)
-    if st.session_state.pagina == "Home":
+    with _tab_Home:
         col_u, col_r = st.columns([3, 1])
         with col_u:
             st.title(f"Bora treinar, {st.session_state.usuario}! 💪")
@@ -418,10 +380,11 @@ elif st.session_state.etapa == "App":
                     unsafe_allow_html=True
                 )
 
-    # ========================
-    # TREINO DO DIA
-    # ========================
-    elif st.session_state.pagina == "TreinoDia":
+        # ========================
+        # TREINO DO DIA
+        # ========================
+
+    with _tab_TreinoDia:
         st.header("💪 Treino do Dia")
         st.markdown("Treino completo personalizado — exercícios, séries, repetições e como executar.")
 
@@ -505,10 +468,11 @@ elif st.session_state.etapa == "App":
                     st.success(f"🎉 Parabéns! {st.session_state.treinos_realizados} treinos no total!")
                     st.rerun()
 
-    # ========================
-    # PLANILHA DA SEMANA
-    # ========================
-    elif st.session_state.pagina == "Semana":
+        # ========================
+        # PLANILHA DA SEMANA
+        # ========================
+
+    with _tab_Semana:
         st.header("📅 Planilha de Treino Semanal")
         st.markdown("Planilha completa para a semana — cada dia com foco e objetivo diferentes.")
 
@@ -581,10 +545,11 @@ elif st.session_state.etapa == "App":
                     })
                     st.success("❤️ Salvo!")
 
-    # ========================
-    # TREINO EM CASA
-    # ========================
-    elif st.session_state.pagina == "Casa":
+        # ========================
+        # TREINO EM CASA
+        # ========================
+
+    with _tab_Casa:
         st.header("🏠 Treino em Casa")
         st.markdown("Sem academia, sem desculpa — treinos com o peso do corpo em qualquer espaço.")
 
@@ -665,10 +630,11 @@ elif st.session_state.etapa == "App":
                     st.success(f"🎉 Treino {st.session_state.treinos_realizados} concluído!")
                     st.rerun()
 
-    # ========================
-    # PROGRESSÃO DE CARGAS
-    # ========================
-    elif st.session_state.pagina == "Evolucao":
+        # ========================
+        # PROGRESSÃO DE CARGAS
+        # ========================
+
+    with _tab_Evolucao:
         st.header("📈 Progressão de Cargas e Evolução")
         st.markdown("Como aumentar a intensidade semana a semana para nunca parar de evoluir.")
 
@@ -738,10 +704,11 @@ elif st.session_state.etapa == "App":
                     })
                     st.success("❤️ Salvo!")
 
-    # ========================
-    # AQUECIMENTO E ALONGAMENTO
-    # ========================
-    elif st.session_state.pagina == "Alongamento":
+        # ========================
+        # AQUECIMENTO E ALONGAMENTO
+        # ========================
+
+    with _tab_Alongamento:
         st.header("🧘 Aquecimento e Alongamento")
         st.markdown("Prepare o corpo antes e recupere depois — para treinar sem lesões.")
 
@@ -835,10 +802,11 @@ elif st.session_state.etapa == "App":
                     data=st.session_state['along_temp'],
                     file_name="alongamento.txt", mime="text/plain")
 
-    # ========================
-    # TREINOS SALVOS
-    # ========================
-    elif st.session_state.pagina == "Salvos":
+        # ========================
+        # TREINOS SALVOS
+        # ========================
+
+    with _tab_Salvos:
         st.header("❤️ Treinos Salvos")
         st.markdown("Seus treinos favoritos — organizados e prontos para usar a qualquer hora.")
 
@@ -874,10 +842,11 @@ elif st.session_state.etapa == "App":
                             st.session_state.treinos_salvos.pop(idx_real)
                             st.rerun()
 
-    # ========================
-    # PROGRESSO
-    # ========================
-    elif st.session_state.pagina == "Progresso":
+        # ========================
+        # PROGRESSO
+        # ========================
+
+    with _tab_Progresso:
         st.header("📊 Meu Progresso")
 
         total      = len(st.session_state.historico_treinos)
@@ -918,10 +887,11 @@ elif st.session_state.etapa == "App":
                 if filtro != "Todos" and item['tipo'] != filtro:
                     continue
 
-    # ========================
-    # ANAMNESE
-    # ========================
-    elif st.session_state.pagina == "Anamnese":
+        # ========================
+        # ANAMNESE
+        # ========================
+
+    with _tab_Anamnese:
         st.header("📋 Minha Anamnese Completa")
         st.markdown("Preencha uma vez — a IA usa tudo isso em todos os módulos para personalizar cada resposta.")
 
@@ -995,10 +965,11 @@ elif st.session_state.etapa == "App":
             c2.markdown(f"<div class='stat-box'><div class='stat-numero'>{st.session_state.get('an_objetivo','—')}</div><div>Objetivo</div></div>", unsafe_allow_html=True)
             c3.markdown(f"<div class='stat-box'><div class='stat-numero'>{st.session_state.get('an_nivel','—').split(' ')[0]}</div><div>Nível</div></div>", unsafe_allow_html=True)
 
-    # ========================
-    # SUPLEMENTAÇÃO
-    # ========================
-    elif st.session_state.pagina == "Suplementacao":
+        # ========================
+        # SUPLEMENTAÇÃO
+        # ========================
+
+    with _tab_Suplementacao:
         st.header("💊 Suplementação Inteligente")
 
         def contexto_anamnese():
@@ -1087,10 +1058,11 @@ elif st.session_state.etapa == "App":
             if st.session_state.get('sup_evitar_temp'):
                 st.markdown(f"<div class='card-orange'>{st.session_state['sup_evitar_temp']}</div>", unsafe_allow_html=True)
 
-    # ========================
-    # TREINO POR FADIGA
-    # ========================
-    elif st.session_state.pagina == "Fadiga":
+        # ========================
+        # TREINO POR FADIGA
+        # ========================
+
+    with _tab_Fadiga:
         st.header("🔥 Treino por Nível de Energia")
         st.markdown("A IA adapta o treino de hoje ao seu nível real de disposição.")
 
@@ -1142,10 +1114,11 @@ elif st.session_state.etapa == "App":
                     st.session_state.treinos_realizados += 1
                     st.success("🏆 +1 treino concluído!")
 
-    # ========================
-    # CALCULADORA DE MACROS
-    # ========================
-    elif st.session_state.pagina == "Macros":
+        # ========================
+        # CALCULADORA DE MACROS
+        # ========================
+
+    with _tab_Macros:
         st.header("🍽️ Calculadora de Macros")
 
         col1, col2, col3 = st.columns(3)
@@ -1210,10 +1183,11 @@ elif st.session_state.etapa == "App":
                     st.session_state.treinos_salvos.append({'tipo':'Macros','foco':f"{objetivo_mac}",'conteudo':st.session_state['macros_temp'],'data':datetime.now().strftime('%d/%m %H:%M')})
                     st.success("❤️ Salvo!")
 
-    # ========================
-    # RECUPERAÇÃO E SONO
-    # ========================
-    elif st.session_state.pagina == "Recuperacao":
+        # ========================
+        # RECUPERAÇÃO E SONO
+        # ========================
+
+    with _tab_Recuperacao:
         st.header("😴 Recuperação e Sono")
 
         tab_r1, tab_r2, tab_r3 = st.tabs(["😴 Sono e Recuperação","🧊 Recuperação Ativa","🚨 Overtraining"])
@@ -1299,10 +1273,11 @@ elif st.session_state.etapa == "App":
             if st.session_state.get('over_temp'):
                 st.markdown(f"<div class='card-orange'>{st.session_state['over_temp']}</div>", unsafe_allow_html=True)
 
-    # ========================
-    # MÓDULO MENTAL
-    # ========================
-    elif st.session_state.pagina == "Mental":
+        # ========================
+        # MÓDULO MENTAL
+        # ========================
+
+    with _tab_Mental:
         st.header("🧠 Mentalidade e Consistência")
 
         tema_mental = st.selectbox("O que você está enfrentando:", [
@@ -1343,10 +1318,11 @@ elif st.session_state.etapa == "App":
                     st.session_state.treinos_salvos.append({'tipo':'Mental','foco':tema_mental,'conteudo':st.session_state['mental_temp'],'data':datetime.now().strftime('%d/%m %H:%M')})
                     st.success("❤️ Salvo!")
 
-    # ========================
-    # BIBLIOTECA DE EXERCÍCIOS
-    # ========================
-    elif st.session_state.pagina == "Biblioteca":
+        # ========================
+        # BIBLIOTECA DE EXERCÍCIOS
+        # ========================
+
+    with _tab_Biblioteca:
         st.header("📚 Biblioteca de Exercícios")
 
         tab_b1, tab_b2, tab_b3 = st.tabs(["🔄 Substituições","📖 Guia do Exercício","💢 Adaptações para Lesão"])
@@ -1426,10 +1402,11 @@ elif st.session_state.etapa == "App":
                 st.markdown(f"<div class='card-orange'>{st.session_state['adapt_lesao_temp']}</div>", unsafe_allow_html=True)
                 st.markdown("<div class='disclaimer' style='background:#FFF7ED;border:1px solid #FDE68A;border-radius:10px;padding:12px;font-size:0.82em;color:#92400E;margin-top:8px;'>⚠️ Este conteúdo é educativo. Sempre consulte um médico ou fisioterapeuta antes de treinar com lesões.</div>", unsafe_allow_html=True)
 
-    # ========================
-    # DESAFIO 30/60/90 DIAS
-    # ========================
-    elif st.session_state.pagina == "Desafio":
+        # ========================
+        # DESAFIO 30/60/90 DIAS
+        # ========================
+
+    with _tab_Desafio:
         st.header("🏆 Desafio 30/60/90 Dias")
 
         if 'desafio_ativo' not in st.session_state:
@@ -1530,6 +1507,13 @@ elif st.session_state.etapa == "App":
                 st.session_state.desafio_ativo = None
                 st.rerun()
 
+
+        # --- RODAPÉ ---
+        st.markdown(
+        "<div style='text-align:center;color:#999;font-size:0.8em;margin-top:60px;'>"
+        "© 2026 Personal Trainer IA — Treinos Personalizados com IA · Quiz Com Prêmios"
+        "</div>", unsafe_allow_html=True
+        )
 
 # --- RODAPÉ ---
 st.markdown(
