@@ -112,10 +112,22 @@ def gerar_json_sessao() -> str:
     dados['salvo_em'] = datetime.now().strftime('%d/%m/%Y %H:%M')
     return json.dumps(dados, ensure_ascii=False, indent=2, default=str)
 
-def carregar_json_sessao(dados: dict):
-    for k in CHAVES_SALVAR:
-        if k in dados:
-            st.session_state[k] = dados[k]
+def carregar_json_sessao(dados):
+    _bloq = {'api_key','etapa','nome_login','chave_login','upload_login','btn_entrar_login'}
+    _pref = (
+        'btn_','sel_','ul_','dl_','cad_','_sub','_sm','_tab','_bsc',
+        'ativo_','rem_','sel_pet_','ev_','prof_','hig_','prev_',
+        'vac_','sint_','comp_','trad_','subs_','amb_','viag_','chat_',
+        'duvida_','emerg_','peso_','data_','obs_','tipo_','vet_','desc_',
+        'local_','prox_','alim','sit_emerg_','tc_','oraf','siau','agmag',
+        'lv','mv','pt','pi','sh','wc','rv','rp','rc',
+    )
+    import re as _re
+    for k, v in dados.items():
+        if k in _bloq: continue
+        if any(k.startswith(p) for p in _pref): continue
+        if _re.match(r'.+_\d+$', k): continue
+        st.session_state[k] = v
 
 def salvar_perfil_cache(usuario: str):
     _cache["perfis"][usuario] = {k: st.session_state.get(k) for k in CHAVES_SALVAR}
@@ -241,7 +253,7 @@ if 'treinos_salvos' not in st.session_state: st.session_state['treinos_salvos'] 
 
 if st.session_state.etapa == "Login":
     st.markdown("# 🤖 PERSONAL TRAINER IA")
-    st.markdown("<div class=\'card\'><b>🔒 ACESSO RESTRITO A CLIENTES DO QUIZ COM PRÊMIOS</b><br>🔗 quizcompremios.com.br</div>", unsafe_allow_html=True)
+    st.markdown("<div class=\'card\'><b>🔒 ACESSO RESTRITO A CLIENTES DO QUIZ COM PRÊMIOS</b><br>🔗 <a href='https://quizcompremios.com.br' target='_blank' style='color:#4F46E5;font-weight:700;text-decoration:underline;'>quizcompremios.com.br</a></div>", unsafe_allow_html=True)
     st.info("💻 **Dica:** Pela complexidade dos agentes, no computador a experiência é mais agradável.")
     with st.container():
         nome  = st.text_input("Seu Nome:", key="nome_login")
@@ -266,6 +278,27 @@ elif st.session_state.etapa == "App":
 
     # TABS — navegação nativa
     (_tab_Home, _tab_TreinoDia, _tab_Semana, _tab_Casa, _tab_Evolucao, _tab_Alongamento, _tab_Salvos, _tab_Progresso, _tab_Anamnese, _tab_Suplementacao, _tab_Fadiga, _tab_Macros, _tab_Recuperacao, _tab_Mental, _tab_Biblioteca, _tab_Desafio) = st.tabs(['🏠 Painel', '💪 Treino do Dia', '📅 Semana', '🏡 Treino Casa', '📈 Progressão', '🧘 Alongamento', '❤️ Salvos', '📊 Progresso', '📋 Anamnese', '💊 Suplementação', '🔥 Energia', '🍽️ Macros', '😴 Recuperação', '🧠 Mentalidade', '📚 Biblioteca', '🏆 Desafio'])
+
+    # ── BARRA SALVAR — aparece em todas as abas ──
+    with st.expander("💾 Salvar / Carregar meus dados", expanded=False):
+        _bsc1, _bsc2 = st.columns(2)
+        with _bsc1:
+            import json as _jsv
+            _dsv = {k: st.session_state.get(k) for k in list(st.session_state.keys()) if not k.startswith('_') and k not in ('api_key',)}
+            st.download_button("💾 Baixar meus dados (.json)",
+                data=_jsv.dumps(_dsv, ensure_ascii=False, indent=2, default=str),
+                file_name=f"dados_{st.session_state.get('usuario','user')}.json",
+                mime="application/json", key="dl_barra_sv_personal")
+        with _bsc2:
+            _fupsv = st.file_uploader("📂 Carregar dados salvos:", type=["json"], key="ul_barra_sv_personal", label_visibility="collapsed")
+            if _fupsv:
+                try:
+                    import json as _jld
+                    for _k2,_v2 in _jld.loads(_fupsv.read().decode()).items():
+                        if _k2 not in ('api_key','etapa'): st.session_state[_k2] = _v2
+                    st.success("✅ Dados restaurados!"); st.rerun()
+                except: st.error("Arquivo inválido.")
+
 
     with _tab_Home:
         col_u, col_r = st.columns([3, 1])
@@ -385,6 +418,27 @@ elif st.session_state.etapa == "App":
         # TREINO DO DIA
         # ========================
 
+        st.markdown("<hr class='divider'>", unsafe_allow_html=True)
+        st.markdown("### 💾 Salvar e Carregar Dados")
+        _csl1, _csl2 = st.columns(2)
+        with _csl1:
+            import json as _json_sv
+            _dados_sv = {k: st.session_state.get(k) for k in list(st.session_state.keys()) if not k.startswith('_')}
+            st.download_button("💾 Salvar dados (.json)",
+                data=_json_sv.dumps(_dados_sv, ensure_ascii=False, indent=2, default=str),
+                file_name=f"dados_{st.session_state.get('usuario','user')}.json",
+                mime="application/json", key="dl_sv_personal")
+        with _csl2:
+            _arq_sv = st.file_uploader("📂 Carregar dados:", type=["json"], key="ul_sv_personal")
+            if _arq_sv:
+                try:
+                    import json as _json_ld
+                    for _k, _v in _json_ld.loads(_arq_sv.read().decode()).items():
+                        st.session_state[_k] = _v
+                    st.success("✅ Dados carregados!")
+                    st.rerun()
+                except: st.error("Arquivo inválido.")
+
     with _tab_TreinoDia:
         st.header("💪 Treino do Dia")
         st.markdown("Treino completo personalizado — exercícios, séries, repetições e como executar.")
@@ -444,6 +498,7 @@ elif st.session_state.etapa == "App":
                     f"[O que trabalhar na próxima sessão para equilíbrio muscular]"
                 )
                 res = personal_ia(prompt)
+                if res: st.session_state['res_treinodia_person1'] = str(res)
                 salvar_treino("Treino do Dia", foco_dia, res)
                 st.session_state['treino_dia_temp'] = res
                 st.markdown(f"<div class='card'>{res}</div>", unsafe_allow_html=True)
@@ -526,6 +581,7 @@ elif st.session_state.etapa == "App":
                     f"[1 estratégia para maximizar os resultados dessa divisão]"
                 )
                 res = personal_ia(prompt)
+                if res: st.session_state['res_semana_person2'] = str(res)
                 salvar_treino("Planilha Semanal", f"{dias_s} dias", res)
                 st.session_state['semana_temp'] = res
                 st.markdown(f"<div class='card-dark'>{res}</div>", unsafe_allow_html=True)
@@ -607,6 +663,7 @@ elif st.session_state.etapa == "App":
                     f"[Como usar o cronômetro para esse treino — Tabata, EMOM, AMRAP...]"
                 )
                 res = personal_ia(prompt)
+                if res: st.session_state['res_casa_person3'] = str(res)
                 salvar_treino("Treino em Casa", foco_casa, res)
                 st.session_state['casa_temp'] = res
                 st.markdown(f"<div class='card-green'>{res}</div>", unsafe_allow_html=True)
@@ -684,6 +741,7 @@ elif st.session_state.etapa == "App":
                         f"[Como organizar os ciclos após as 8 semanas]"
                     )
                     res = personal_ia(prompt)
+                    if res: st.session_state['res_evolucao_person4'] = str(res)
                     salvar_treino("Progressão de Cargas", objetivo_e, res)
                     st.session_state['evolucao_temp'] = res
                     st.markdown(f"<div class='card-blue'>{res}</div>", unsafe_allow_html=True)
@@ -751,6 +809,7 @@ elif st.session_state.etapa == "App":
                         f"[Sinais de que o corpo está aquecido corretamente]"
                     )
                     res = personal_ia(prompt)
+                    if res: st.session_state['res_alongamento_person5'] = str(res)
                     salvar_treino("Aquecimento", musculo_aq, res)
                     st.session_state['aquec_temp'] = res
                     st.markdown(f"<div class='card-orange'>{res}</div>", unsafe_allow_html=True)
@@ -794,6 +853,7 @@ elif st.session_state.etapa == "App":
                         f"[O que comer/beber nas próximas 2 horas para maximizar a recuperação]"
                     )
                     res = personal_ia(prompt)
+                    if res: st.session_state['res_alongamento_person6'] = str(res)
                     salvar_treino("Alongamento", musculo_al, res)
                     st.session_state['along_temp'] = res
                     st.markdown(f"<div class='card-purple'>{res}</div>", unsafe_allow_html=True)
@@ -1010,6 +1070,7 @@ elif st.session_state.etapa == "App":
                         f"⚠️ IMPORTANTE:\n[interações com medicamentos se houver, contraindicações pelo perfil de saúde]"
                     )
                     res = personal_ia(prompt, "Seja honesto sobre evidências científicas. Não exagere benefícios. Sempre considere as condições de saúde reportadas.")
+                    if res: st.session_state['res_suplementaca_person7'] = str(res)
                     salvar_treino("Suplementacao", "Recomendação personalizada", res)
                     st.session_state['sup_rec_temp'] = res
 
@@ -1037,6 +1098,7 @@ elif st.session_state.etapa == "App":
                         f"⚠️ CUIDADOS E CONTRAINDICAÇÕES:\n[quem deve evitar ou consultar médico antes]"
                     )
                     res = personal_ia(prompt)
+                    if res: st.session_state['res_suplementaca_person8'] = str(res)
                     st.session_state['sup_guia_temp'] = res
 
             if st.session_state.get('sup_guia_temp'):
@@ -1054,6 +1116,7 @@ elif st.session_state.etapa == "App":
                         f"💡 REGRA DE OURO:\n[como avaliar qualquer novo suplemento antes de comprar]"
                     )
                     res = personal_ia(prompt)
+                    if res: st.session_state['res_suplementaca_person9'] = str(res)
                     st.session_state['sup_evitar_temp'] = res
 
             if st.session_state.get('sup_evitar_temp'):
@@ -1101,6 +1164,7 @@ elif st.session_state.etapa == "App":
                     f"💡 CONSELHO DO DIA:\n[1 orientação sobre treinar com esse nível de energia]"
                 )
                 res = personal_ia(prompt)
+                if res: st.session_state['res_fadiga_person10'] = str(res)
                 salvar_treino("Fadiga", f"Energia {energia_pct}%", res)
                 st.session_state['fadiga_temp'] = res
 
@@ -1171,6 +1235,7 @@ elif st.session_state.etapa == "App":
                     f"💡 DICA PRINCIPAL:\n[1 ajuste que mais impacta o resultado para esse objetivo]"
                 )
                 res = personal_ia(prompt)
+                if res: st.session_state['res_macros_person11'] = str(res)
                 salvar_treino("Macros", f"{objetivo_mac} — {cal_alvo:.0f}kcal", res)
                 st.session_state['macros_temp'] = res
 
@@ -1215,6 +1280,7 @@ elif st.session_state.etapa == "App":
                         f"🎯 META DESTA SEMANA:\n[1 mudança concreta para começar hoje]"
                     )
                     res = personal_ia(prompt)
+                    if res: st.session_state['res_recuperacao_person12'] = str(res)
                     st.session_state['sono_temp'] = res
 
             if st.session_state.get('sono_temp'):
@@ -1238,6 +1304,7 @@ elif st.session_state.etapa == "App":
                         f"⏳ QUANDO VOLTAR AO TREINO INTENSO:\n[guia de timing baseado no estado atual]"
                     )
                     res = personal_ia(prompt)
+                    if res: st.session_state['res_recuperacao_person13'] = str(res)
                     st.session_state['rec_ativa_temp'] = res
 
             if st.session_state.get('rec_ativa_temp'):
@@ -1267,6 +1334,7 @@ elif st.session_state.etapa == "App":
                             f"✅ COMO PREVENIR NO FUTURO:\n[periodização e sinais de alerta precoces]"
                         )
                         res = personal_ia(prompt, "Seja conservador nas recomendações de saúde. Se os sintomas forem graves, recomende avaliação médica.")
+                        if res: st.session_state['res_recuperacao_person14'] = str(res)
                         st.session_state['over_temp'] = res
                 else:
                     st.info("Selecione os sintomas que está sentindo.")
@@ -1306,6 +1374,7 @@ elif st.session_state.etapa == "App":
                     f"💪 REFRAME:\n[uma perspectiva diferente que muda como você vê a situação]"
                 )
                 res = personal_ia(prompt, "Seja direto, empático e prático. Evite clichês motivacionais vazios. Fale de igual para igual.")
+                if res: st.session_state['res_mental_person15'] = str(res)
                 salvar_treino("Mental", tema_mental, res)
                 st.session_state['mental_temp'] = res
 
@@ -1352,6 +1421,7 @@ elif st.session_state.etapa == "App":
                             f"💡 DICA DE TRANSIÇÃO:\n[como adaptar a carga/série ao mudar de exercício]"
                         )
                         res = personal_ia(prompt)
+                        if res: st.session_state['res_biblioteca_person16'] = str(res)
                         st.session_state['subst_temp'] = res
 
             if st.session_state.get('subst_temp'):
@@ -1375,6 +1445,7 @@ elif st.session_state.etapa == "App":
                             f"⚠️ CUIDADOS E CONTRAINDICAÇÕES:\n[quando evitar ou ter cuidado especial]"
                         )
                         res = personal_ia(prompt)
+                        if res: st.session_state['res_biblioteca_person17'] = str(res)
                         st.session_state['guia_ex_temp'] = res
 
             if st.session_state.get('guia_ex_temp'):
@@ -1397,6 +1468,7 @@ elif st.session_state.etapa == "App":
                             f"🩺 QUANDO CONSULTAR UM PROFISSIONAL:\n[sinais de alerta que indicam necessidade de avaliação médica]"
                         )
                         res = personal_ia(prompt, "IMPORTANTE: sempre recomende avaliação médica ou fisioterapêutica antes de treinar com lesões. Não faça diagnóstico — apenas oriente sobre adaptações gerais.")
+                        if res: st.session_state['res_biblioteca_person18'] = str(res)
                         st.session_state['adapt_lesao_temp'] = res
 
             if st.session_state.get('adapt_lesao_temp'):
@@ -1447,6 +1519,7 @@ elif st.session_state.etapa == "App":
                         f"💡 MISSÃO DO DIA 1:\n[o que fazer hoje para começar com força]"
                     )
                     res = personal_ia(prompt)
+                    if res: st.session_state['res_desafio_person19'] = str(res)
                     st.session_state.desafio_ativo = {
                         'duracao': duracao_des, 'objetivo': objetivo_des,
                         'inicio': datetime.now().strftime('%d/%m/%Y'),
